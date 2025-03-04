@@ -37,9 +37,9 @@ export class HumanTicTacToePlayer {
   
   /** TODO: confirm it if we really need this */
   // Adding empty play method to satisfy the interface
-  // play = (board: any): number => {
-  //   // This should never be called for a human player
-  //   console.warn("HumanTicTacToePlayer's play method was called, but this should never happen");
-  //   return -1;
-  // }
+  play = (board: any): number => {
+    // This should never be called for a human player
+    console.warn("HumanTicTacToePlayer's play method was called, but this should never happen");
+    return -1;
+  }
 }
