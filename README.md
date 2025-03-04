@@ -62,6 +62,3 @@ by using Python.
 
 To overcome some API limitation (Tensorflow.js export/save model/weights), so this JavaScript repo borrows one of the features of AlphaZero, **always accept trained model after each iteration without comparing to previous version**
 
-## Known issue
-
-The built from `npm run build` does not work. 
