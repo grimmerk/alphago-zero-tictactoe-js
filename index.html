@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="theme-color" content="#000000">
+  <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+    -->
+  <link rel="manifest" href="/manifest.json">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css">
+
+  <title>React TicTacToe AlphaGo App</title>
+</head>
+
+<body>
+  <noscript>
+    You need to enable JavaScript to run this app.
+  </noscript>
+  <div id="root"></div>
+  <script type="module" src="/src/index.tsx"></script>
+  <script>
+    window.addEventListener('mousedown', function(e) {
+      document.body.classList.add('mouse-navigation');
+      document.body.classList.remove('kbd-navigation');
+    });
+    window.addEventListener('keydown', function(e) {
+      if (e.keyCode === 9) {
+        document.body.classList.add('kbd-navigation');
+        document.body.classList.remove('mouse-navigation');
+      }
+    });
+    window.addEventListener('click', function(e) {
+      if (e.target.tagName === 'A' && e.target.getAttribute('href') === '#') {
+        e.preventDefault();
+      }
+    });
+    console.error = (function(old) {
+      return function error() {
+        var errors = document.getElementById('errors') || document.createElement('div');
+        errors.id = 'errors';
+        errors.textContent += Array.prototype.slice.call(arguments).join(' ') + '\n';
+        errors.style.display = '';
+        old.apply(this, arguments);
+      }
+    })(console.error);
+  </script>
+</body>
+</html>

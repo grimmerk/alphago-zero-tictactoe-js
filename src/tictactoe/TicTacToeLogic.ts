@@ -1,29 +1,30 @@
-const __directions = [(1, 1), (1, 0), (1, -1), (0, -1), (-1, -1), (-1, 0), (-1, 1), (0, 1)];
+// Define types for moves
+interface Move {
+  x: number;
+  y: number;
+}
 
 export default class Board {
-  constructor(n = 3) {
+  n: number;
+  pieces: number[][];
+
+  constructor(n: number = 3) {
     this.n = n;
 
-    // Python:
-    // Create the empty board array.
-    // #[None, None, None] = [None] *3
-    // self.pieces = [None]*self.n
-    // for i in range(self.n):
-    //     self.pieces[i] = [0]*self.n # [[0,0,0],[0,0,0],[0,0,0]]
-
-    this.pieces = Array(this.n).fill(Array(this.n).fill(0));
+    // Create the empty board array
+    // this.pieces = Array(this.n).fill(Array(this.n).fill(0));
+    /** the above would create an 2d array with same 1d array reference, 
+     * e.g. arr1[0][0] = 1 would result in [1][0], [2][0] = 1.
+     * apply this fix later */
+    // Note: Need to create a new array for each row to avoid reference issues
+    this.pieces = Array(this.n).fill(0).map(() => Array(this.n).fill(0));
   }
 
-  get_legal_moves() {
-    // Python:
-    // """Returns all the legal moves for the given color.
+  get_legal_moves(player?: number): Move[] {
+    // Returns all the legal moves
     // (1 for white, -1 for black)
-    // @param color not used and came from previous version.
-    // """
-    // moves = set()  # stores the legal moves.
-
-    // # Get all the empty squares (color==0)
-    const moves = [];
+    // player parameter is not used and came from previous version
+    const moves: Move[] = [];
     for (let i = 0; i < this.n; i++) {
       for (let j = 0; j < this.n; j++) {
         if (this.pieces[j][i] === 0) {
@@ -34,7 +35,7 @@ export default class Board {
     return moves;
   }
 
-  has_legal_moves() {
+  has_legal_moves(): boolean {
     for (let i = 0; i < this.n; i++) {
       for (let j = 0; j < this.n; j++) {
         if (this.pieces[j][i] === 0) {
@@ -42,15 +43,15 @@ export default class Board {
         }
       }
     }
+    return false; // Added return false which was missing in the original
   }
 
-  is_win(color) {
-    // Python:
-    // """Check whether the given player has collected a triplet in any direction;
-    // @param color (1=white,-1=black)
-    // """
+  is_win(color: number): boolean {
+    // Check whether the given player has collected a triplet in any direction
+    // color (1=white, -1=black)
     const win = this.n;
     let count = 0;
+    
     // check y-strips
     for (let y = 0; y < this.n; y++) {
       count = 0;
@@ -63,6 +64,7 @@ export default class Board {
         return true;
       }
     }
+    
     // check x-strips
     for (let x = 0; x < this.n; x++) {
       count = 0;
@@ -75,6 +77,7 @@ export default class Board {
         return true;
       }
     }
+    
     // check two diagonal-strips
     count = 0;
     for (let d = 0; d < this.n; d++) {
@@ -85,6 +88,7 @@ export default class Board {
     if (count === win) {
       return true;
     }
+    
     count = 0;
     for (let d = 0; d < this.n; d++) {
       if (this.pieces[d][this.n - d - 1] === color) {
@@ -95,23 +99,17 @@ export default class Board {
       return true;
     }
 
-
     return false;
   }
 
-  execute_move(move, color) {
-    // Python:
-    // """Perform the given move on the board;
-    // color gives the color pf the piece to play (1=white,-1=black)
-    // """
-    // (x,y) = move
-
-    // console.log('move:', move);
+  execute_move(move: Move, color: number): void {
+    // Perform the given move on the board
+    // color gives the color of the piece to play (1=white, -1=black)
     let { x, y } = move;
+    
     if (x < 0) {
       if (x < -1) {
-        // console.log('x position is negtive (not -1)!!');
-        throw 'x position is wrong!!';
+        throw new Error('x position is wrong!!');
       } else {
         x = this.pieces.length - 1;
       }
@@ -119,21 +117,17 @@ export default class Board {
 
     if (y < 0) {
       if (y < -1) {
-        // console.log('y position is negtive (not -1)!!');
-        throw 'y position is wrong!!';
+        throw new Error('y position is wrong!!');
       } else {
         y = this.pieces[0].length - 1;
       }
     }
 
-    // Python:
-    // # Add the piece to the empty square.
-    // assert self[x][y] == 0
-    // self[x][y] = color
+    // Add the piece to the empty square
     if (this.pieces[x][y] === 0) {
       this.pieces[x][y] = color;
     } else {
-      throw 'already colored, wrong';
+      throw new Error('already colored, wrong');
     }
   }
 }

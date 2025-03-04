@@ -1,14 +1,20 @@
 import React, { Component } from 'react';
-// import logo from './logo.svg';
 import './App.css';
-import { Checkbox, Button } from 'semantic-ui-react';
+// @ts-ignore - Allow semantic-ui-react imports without type errors
+import { Button, Checkbox } from 'semantic-ui-react';
 
-import play, { downloadPretrained, humanMove } from './pit';
 import train from './main';
-// import train from './tictactoe/tensorflow/TicTacToeNNet';
+import play, { downloadPretrained, humanMove } from './pit';
 
-class App extends Component {
-  constructor(props) {
+interface AppState {
+  enabledAI: boolean;
+  aiIsDownloaded: boolean;
+  aiFirst: boolean;
+  selfTrained: boolean;
+}
+
+class App extends Component<{}, AppState> {
+  constructor(props: {}) {
     super(props);
     this.state = {
       enabledAI: false,
@@ -18,30 +24,27 @@ class App extends Component {
     };
   }
 
-  twoRandowmPlay =() => {
+  twoRandowmPlay = (): void => {
     play();
   }
 
-  startTrain = async () => {
+  startTrain = async (): Promise<void> => {
     console.log('start-train');
     await train();
     console.log('end-train');
     this.setState({ selfTrained: true });
   }
 
-  selfTrainVSRandom = () => {
+  selfTrainVSRandom = (): void => {
     console.log('selfTrainVSRandom');
     play(1);
   }
 
-  // userVSuser = () => {
-  // }
-
-  twoRandowmPlayWithPretrained = async () => {
+  twoRandowmPlayWithPretrained = async (): Promise<void> => {
     play(2);
   }
 
-  downloadPretrained = async () => {
+  downloadPretrained = async (): Promise<void> => {
     if (this.state.aiIsDownloaded === false) {
       console.log('ui start to download');
       await downloadPretrained();
@@ -50,27 +53,27 @@ class App extends Component {
     }
   }
 
-  toggleAI = () => {
+  toggleAI = (): void => {
     this.setState({ enabledAI: !this.state.enabledAI });
   }
 
-  handleClick = action => humanMove(action)
+  handleClick = (action: number): number => humanMove(action);
 
-  startNewGame = () => {
+  startNewGame = (): number => {
     console.log('start new game');
     if (this.state.enabledAI) {
       if (this.state.selfTrained === false && this.state.aiIsDownloaded === false) {
         alert('ai is not download yet');
       }
-      let action;
+      let action: number | undefined;
       if (this.state.selfTrained) {
         action = play(4, this.state.aiFirst);
       } else {
         action = play(3, this.state.aiFirst);
       }
-      this.setState((prevState, props) => ({ aiFirst: !prevState.aiFirst }));
+      this.setState((prevState) => ({ aiFirst: !prevState.aiFirst }));
 
-      if (action >= 0) {
+      if (action !== undefined && action >= 0) {
         console.log('ai starts at:', action);
         return action;
       }
@@ -81,10 +84,6 @@ class App extends Component {
   render() {
     return (
       <div className="App" style={{ display: 'flex', justifyContent: 'center' }}>
-        {/* <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header> */}
         <div>
           <div>
             <h1>AlphaGo Zero TicTacToe Game, using TensorFlow.js
@@ -95,9 +94,6 @@ class App extends Component {
               {'Development only part:'}
             </h3>
           </div>
-          {/* <p className="App-intro">
-            <code>No UI</code> refers to use Console to debug or see the results.
-          </p> */}
           <div style={{ margin: 10 }}>
             <Button onClick={this.twoRandowmPlay}>
               Start two random players games (console result)
@@ -122,11 +118,6 @@ class App extends Component {
               Self-trained vs Random
             </Button>
           </div>
-          {/* <div>
-            <button onClick={this.userVSSelfTrain}>
-              user VS SelfTrained
-            </button>
-          </div> */}
 
           <div style={{ margin: 10 }}>
             <Button onClick={this.twoRandowmPlayWithPretrained}>
@@ -139,11 +130,6 @@ class App extends Component {
             Users part: 1. download 2. enable AI 3. click start (AI may take a while to think)
             </h3>
           </div>
-          {/* <div>
-            <button onClick={this.userVSPretrained}>
-              User VS Pretrained AlphaGo AI, show TicTacToe UI to play
-            </button>
-          </div> */}
           <div>
             {'Player vs Player '}
             <Checkbox
@@ -165,20 +151,18 @@ class App extends Component {
               startNewGame={this.startNewGame}
             />
           </div>
-
-          {/* <div>
-            <button onClick={this.userVSuser}>
-              userVSuser
-            </button>
-          </div> */}
         </div>
-
       </div>
     );
   }
 }
 
-function Square(props) {
+interface SquareProps {
+  value: string | null;
+  onClick: () => void;
+}
+
+function Square(props: SquareProps) {
   return (
     <button className="square" onClick={props.onClick}>
       {props.value}
@@ -186,12 +170,17 @@ function Square(props) {
   );
 }
 
+interface TicTacToeBoardProps {
+  squares: (string | null)[];
+  onClick: (i: number) => void;
+}
+
 /**
  * from https://codepen.io/gaearon/pen/gWWZgR
  * @extends React
  */
-class TicTacToeBoard extends React.Component {
-  renderSquare(i) {
+class TicTacToeBoard extends React.Component<TicTacToeBoardProps> {
+  renderSquare(i: number) {
     return (
       <Square
         value={this.props.squares[i]}
@@ -223,8 +212,19 @@ class TicTacToeBoard extends React.Component {
   }
 }
 
-class TicTacToeApp extends React.Component {
-  constructor(props) {
+interface TicTacToeAppProps {
+  handleClick?: (i: number) => number;
+  startNewGame?: () => number;
+}
+
+interface TicTacToeAppState {
+  history: { squares: (string | null)[] }[];
+  stepNumber: number;
+  xIsNext: boolean;
+}
+
+class TicTacToeApp extends React.Component<TicTacToeAppProps, TicTacToeAppState> {
+  constructor(props: TicTacToeAppProps) {
     super(props);
     this.state = {
       history: [
@@ -237,7 +237,7 @@ class TicTacToeApp extends React.Component {
     };
   }
 
-  handleClick(i, human) {
+  handleClick(i: number, human?: number): void {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
@@ -256,35 +256,25 @@ class TicTacToeApp extends React.Component {
     });
 
     if (human && this.props.handleClick) {
-      // const action = this.props.handleClick(i);
-      // if (action >= 0) {
       setTimeout(() => {
-        const action = this.props.handleClick(i);
+        const action = this.props.handleClick!(i);
         if (action >= 0) {
           console.log('ai move:', action);
           this.handleClick(action);
         }
       }, 50);
-
-
-      // this.handleClick(action);
     }
   }
 
-  jumpTo(step) {
+  jumpTo(step: number): void {
     this.setState({
       stepNumber: step,
       xIsNext: (step % 2) === 0,
     });
 
     if (this.props.startNewGame) {
-      // TODO: this is anti-parttern (directly get the result)
-      // const action = this.props.startNewGame();
-      // if (action >= 0) {
-      //   console.log('ai moves !!!!');
-      //   // AI move
       setTimeout(() => {
-        const action = this.props.startNewGame();
+        const action = this.props.startNewGame!();
         if (action >= 0) {
           console.log('ai moves !!!!');
           this.handleClick(action);
@@ -338,11 +328,7 @@ class TicTacToeApp extends React.Component {
   }
 }
 
-// ========================================
-
-// ReactDOM.render(<Game />, document.getElementById('root'));
-
-function calculateWinner(squares) {
+function calculateWinner(squares: (string | null)[]): string | null {
   const lines = [
     [0, 1, 2],
     [3, 4, 5],

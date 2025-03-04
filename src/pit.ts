@@ -11,25 +11,31 @@ import { NNetWrapper as NNet } from './tictactoe/tensorflow/NNet';
 import * as players from './tictactoe/TicTacToePlayers';
 // from tictactoe.TicTacToePlayers import *
 
+// Player interface
+interface Player {
+  play: (board: any) => number;
+}
+
 // TicTacToeGame reference
 // seems that it does not need to be reused
 // const humanGame = null;
 
-let preTrainedModel = null;
-let humanArena = null;
+let preTrainedModel: NNet | null = null;
+let humanArena: Arena | null = null;
 
-export async function downloadPretrained() {
+export async function downloadPretrained(): Promise<void> {
   if (!preTrainedModel) {
     // if (!humanGame) {
     const humanGame = new TicTacToeGame();
     // }
     preTrainedModel = new NNet(humanGame);
     // firstPlayr = new players.RandomPlayer(g);
-    await preTrainedModel.loadPretrained('https://grimmer.io/alphago-tictactoe-keras-trained/model.json');
+    const url = 'https://raw.githubusercontent.com/grimmerk/grimmerk.github.io/refs/heads/master/alphago-tictactoe-keras-trained/model.json'
+    await preTrainedModel.loadPretrained(url);
   }
 }
 
-export function humanMove(action) {
+export function humanMove(action: number): number {
   if (humanArena) {
     return humanArena.humanStep(action);
   }
@@ -46,12 +52,12 @@ export function humanMove(action) {
  *  3: 1 pretrained vs human
  *  4: self-treained vs human
  */
-export default function play(mode, aiFirst) {
+export default function play(mode?: number, aiFirst?: boolean): number | undefined {
   const g = new TicTacToeGame();
   const args1 = { numMCTSSims: 50, cpuct: 1.0 };
-  let n1;
-  let mcts1 = null;
-  let firstPlayr = null;
+  let n1: NNet | null = null;
+  let mcts1: MCTS | null = null;
+  let firstPlayr: Player | null = null;
 
   if (mode === 1 || mode === 4) {
     n1 = getTrainedNN();
@@ -66,16 +72,16 @@ export default function play(mode, aiFirst) {
       return;
     }
     console.log('load pretraind to play');
-  } else {
+  } else { // TODO: do we really not support mode 0, or it should be corrected to "if (mode !== 0) {"?
     console.log('invalid mode, return');
     return;
   }
 
   if (mode) {
-    mcts1 = new MCTS(g, n1, args1);
+    mcts1 = new MCTS(g, n1!, args1);
 
-    const n1p = (x) => {
-      const list = mcts1.getActionProb(x, 0);
+    const n1p = (x: any) => {
+      const list = mcts1!.getActionProb(x, 0);
       return Utils.argmax(list);
     };
     firstPlayr = { play: n1p };
@@ -95,11 +101,12 @@ export default function play(mode, aiFirst) {
     return action;
   }
 
-
   // const rp = new players.RandomPlayer(g);// .play;
   const rp2 = new players.RandomPlayer(g);// .play;
 
   const arena = new Arena(firstPlayr, rp2, g, display);
   console.log(arena.playGames(25, false));
   console.log('finish');
+  
+  return undefined;
 }

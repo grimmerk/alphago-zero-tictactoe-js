@@ -1,28 +1,52 @@
+interface Player {
+  play: (board: any) => number;
+  isHuman?: boolean;
+}
+
+interface Game {
+  getInitBoardNdArray: () => any;
+  getCanonicalForm: (board: any, player: number) => any;
+  getValidMoves: (board: any, player: number) => any;
+  getNextState: (board: any, player: number, action: number) => { boardNdArray: any, curPlayer: number };
+  getGameEnded: (board: any, player: number) => number;
+}
+
+interface GameResult {
+  oneWon: number;
+  twoWon: number;
+  draws: number;
+}
+
 export default class Arena {
   // """
   // An Arena class where any 2 agents can be pit against each other.
   // """
-  //
-  constructor(player1, player2, game, display) {
-    console.log('Arena constructer');
+  
+  private player1: Player;
+  private player2: Player;
+  private game: Game;
+  private display: (board: any) => void;
+  
+  // NOTE: used for pretrained-ai vs human
+  private players: (Player | null)[] | null = null;
+  private curPlayer: number = 0; // 0:dummy. real values: 1 or -1
+  private boardNdArray: any = null;
+
+  constructor(player1: Player, player2: Player, game: Game, display: (board: any) => void) {
+    console.log('Arena constructor');
     this.player1 = player1;
     this.player2 = player2;
     this.game = game;
     this.display = display;
-
-    // Grimmer. used for pretrained-ai vs human
-    this.players = null;
-    this.curPlayer = 0; // 0:dummy. real values: 1 or -1
-    this.boardNdArray = null;
   }
 
-  gameMoveByAction(action) {
+  gameMoveByAction(action: number): void {
     let valids = this.game.getValidMoves(this.game.getCanonicalForm(this.boardNdArray, this.curPlayer), 1);
     valids = valids.tolist();
     if (valids[action] == 0) {
       console.log(action);
       // assert valids[action] >0
-      throw 'can not find out valid action, something wrong';
+      throw new Error('can not find out valid action, something wrong');
     }
     const nextState = this.game.getNextState(this.boardNdArray, this.curPlayer, action);
     this.boardNdArray = nextState.boardNdArray;
@@ -30,17 +54,17 @@ export default class Arena {
   }
 
   // a: board index from 0 to 8
-  humanStep(action) {
+  humanStep(action: number): number {
     console.log('humanStep');
     console.log(`current Player: ${this.curPlayer}`);
 
     let aiAction = -1;
-    if (!this.players[this.curPlayer + 1].isHuman) {
+    if (!this.players?.[this.curPlayer + 1]?.isHuman) {
       console.log('current player is ai, ignore');
       return aiAction;
     }
 
-    // 上一個ai造成的ended?
+    // Was the previous AI caused ended?
     if (this.game.getGameEnded(this.boardNdArray, this.curPlayer) !== 0) {
       // game is ended
       console.log('should not happen, game is ended already');
@@ -50,7 +74,7 @@ export default class Arena {
     this.display(this.boardNdArray);
     // }
 
-    // 就算最後一子還是要call吧.state要變化好
+    // Even if it’s the last move, it still needs to be called. The state needs to change properly.
 
     // 1. human's step.
     this.gameMoveByAction(action);
@@ -76,17 +100,17 @@ export default class Arena {
   }
 
   // it will affect who is the first player of a new game
-  swapTwoPlayers() {
+  swapTwoPlayers(): void {
     console.log('swap');
     const tmpPlayer1 = this.player1;
     this.player1 = this.player2;
     this.player2 = tmpPlayer1;
   }
 
-  tryToPlayAIStep() {
+  tryToPlayAIStep(): number {
     let action = -1;
     console.log('tryToPlayAIStep');
-    if (!this.players[this.curPlayer + 1].isHuman) {
+    if (this.players && !this.players[this.curPlayer + 1]?.isHuman) {
       // it is an AI
 
       // let it = 0;
@@ -98,20 +122,10 @@ export default class Arena {
         console.log(`Player ${this.curPlayer}`);
         // }
 
-        action = this.players[this.curPlayer + 1].play(this.game.getCanonicalForm(this.boardNdArray, this.curPlayer));
-        this.gameMoveByAction(action);
-
-        // let valids = this.game.getValidMoves(this.game.getCanonicalForm(this.boardNdArray, this.curPlayer), 1);
-        // valids = valids.tolist();
-        //
-        // if (valids[action] == 0) {
-        //   console.log(action);
-        //   // assert valids[action] >0
-        //   throw 'can not find out valid action, something wrong';
-        // }
-        // const nextState = this.game.getNextState(this.boardNdArray, this.curPlayer, action);
-        // this.boardNdArray = nextState.boardNdArray;
-        // this.curPlayer = nextState.curPlayer;
+        if (this.players[this.curPlayer + 1]) {
+          action = this.players[this.curPlayer + 1]!.play(this.game.getCanonicalForm(this.boardNdArray, this.curPlayer));
+          this.gameMoveByAction(action);
+        }
       } else {
         console.log('game is already ended');
       }
@@ -126,7 +140,7 @@ export default class Arena {
   // 1. [done] let ui responsbile for the logic about restarts a game
   // 2. [done] let ui responsbile for calling swap function
   // 3. handle the case to give up+restart game. this.game needs reset
-  playNewGameWithHuman() {
+  playNewGameWithHuman(): number {
     this.players = [this.player2, null, this.player1];
     this.curPlayer = 1;
     this.boardNdArray = this.game.getInitBoardNdArray(); // !!!
@@ -135,7 +149,7 @@ export default class Arena {
     return this.tryToPlayAIStep();
   }
 
-  playGame(verbose = false) {
+  playGame(verbose: boolean = false): number {
     const players = [this.player2, null, this.player1];
     let curPlayer = 1;
     let boardNdArray = this.game.getInitBoardNdArray();
@@ -147,14 +161,18 @@ export default class Arena {
         this.display(boardNdArray);
         console.log(`Turn ${it}. Player ${curPlayer}`);
       }
-      const action = players[curPlayer + 1].play(this.game.getCanonicalForm(boardNdArray, curPlayer));
+      
+      const player = players[curPlayer + 1];
+      if (!player) continue;
+      
+      const action = player.play(this.game.getCanonicalForm(boardNdArray, curPlayer));
       let valids = this.game.getValidMoves(this.game.getCanonicalForm(boardNdArray, curPlayer), 1);
       valids = valids.tolist();
 
       if (valids[action] == 0) {
         console.log(action);
         // assert valids[action] >0
-        throw 'can not find out valid action, something wrong';
+        throw new Error('can not find out valid action, something wrong');
       }
       const nextState = this.game.getNextState(boardNdArray, curPlayer, action);
       boardNdArray = nextState.boardNdArray;
@@ -171,7 +189,7 @@ export default class Arena {
   }
 
 
-  playGames(num, verbose = false) {
+  playGames(num: number, verbose: boolean = false): GameResult {
     // eps_time = AverageMeter()
     // bar = Bar('Arena.playGames', max=num)
     // end = time.time()
@@ -191,21 +209,9 @@ export default class Arena {
       } else {
         draws += 1;
       }
-
-      // # bookkeeping + plot progress
-      // eps += 1
-      // eps_time.update(time.time() - end)
-      // end = time.time()
-      // bar.suffix  = '({eps}/{maxeps}) Eps Time: {et:.3f}s | Total: {total:} | ETA: {eta:}'.format(eps=eps+1, maxeps=maxeps, et=eps_time.avg,
-      //                                                                                            total=bar.elapsed_td, eta=bar.eta_td)
-      // bar.next()
     }
 
     this.swapTwoPlayers();
-    // console.log('swap');
-    // const tmpPlayer1 = this.player1;
-    // this.player1 = this.player2,
-    // this.player2 = tmpPlayer1;
 
     for (let i = 0; i < num; i++) {
       const gameResult = this.playGame(verbose);
@@ -216,16 +222,7 @@ export default class Arena {
       } else {
         draws += 1;
       }
-
-      // # bookkeeping + plot progress
-      // eps += 1
-      // eps_time.update(time.time() - end)
-      // end = time.time()
-      // bar.suffix  = '({eps}/{maxeps}) Eps Time: {et:.3f}s | Total: {total:} | ETA: {eta:}'.format(eps=eps+1, maxeps=num, et=eps_time.avg,
-      //                                                                                            total=bar.elapsed_td, eta=bar.eta_td)
-      // bar.next()
     }
-    // bar.finish()
 
     return { oneWon, twoWon, draws };
   }
