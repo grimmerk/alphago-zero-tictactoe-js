@@ -1,6 +1,6 @@
-import Utils from './Utils';
 import nj from '@d4c/numjs';
-import { Game, NeuralNetType, MCTSArgs } from './types/interfaces';
+import { Game, MCTSArgs, NeuralNetType } from './types/interfaces';
+import Utils from './Utils';
 
 const EPS = 1e-8;
 
@@ -16,7 +16,7 @@ export default class MCTS {
   Vs: Record<string, any>; // stores game.getValidMoves for board s
 
   constructor(game: Game, nnet: NeuralNetType, args: MCTSArgs) {
-    console.log('MCTS constructer');
+    console.log('MCTS constructor');
     this.game = game;
     this.nnet = nnet;
     this.args = args;

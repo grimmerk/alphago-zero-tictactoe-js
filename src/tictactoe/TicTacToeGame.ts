@@ -1,6 +1,6 @@
+import nj from '@d4c/numjs';
 import Game from '../Game';
 import Board from './TicTacToeLogic';
-import nj from '@d4c/numjs';
 
 // Define interfaces for return types
 interface BoardSize {
@@ -24,7 +24,7 @@ export class TicTacToeGame extends Game {
 
   constructor(n: number = 3) {
     super();
-    console.log('TicTacToeGame constructer');
+    console.log('TicTacToeGame constructor');
     // board size, 3x3 for TicTacToeGame
     this.n = n;
   }

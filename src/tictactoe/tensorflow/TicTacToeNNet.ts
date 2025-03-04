@@ -16,7 +16,7 @@ export default class TicTacToeNNet {
   // tf.setBackend('cpu');
   // console.log('tf.getBackend:', tf.getBackend());
   constructor(game: Game, args: NNetArgs) {
-    console.log('TicTacToeNNet constructer');
+    console.log('TicTacToeNNet constructor');
 
     const { a, b } = game.getBoardSize();
     this.board_x = a;

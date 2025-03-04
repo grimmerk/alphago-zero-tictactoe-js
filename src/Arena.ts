@@ -33,7 +33,7 @@ export default class Arena {
   private boardNdArray: any = null;
 
   constructor(player1: Player, player2: Player, game: Game, display: (board: any) => void) {
-    console.log('Arena constructer');
+    console.log('Arena constructor');
     this.player1 = player1;
     this.player2 = player2;
     this.game = game;

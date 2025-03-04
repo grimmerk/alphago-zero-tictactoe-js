@@ -7,7 +7,7 @@ export class RandomPlayer {
   game: Game;
   
   constructor(game: Game) {
-    console.log('RandomPlayer constructer');
+    console.log('RandomPlayer constructor');
     this.game = game;
   }
 
@@ -30,7 +30,7 @@ export class HumanTicTacToePlayer {
   isHuman: boolean;
   
   constructor(game: Game) {
-    console.log('HumanTicTacToePlayer constructer');
+    console.log('HumanTicTacToePlayer constructor');
     this.game = game;
     this.isHuman = true;
   }

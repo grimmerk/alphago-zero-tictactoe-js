@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
 // @ts-ignore - Allow semantic-ui-react imports without type errors
-import { Checkbox, Button } from 'semantic-ui-react';
+import { Button, Checkbox } from 'semantic-ui-react';
 
-import play, { downloadPretrained, humanMove } from './pit';
 import train from './main';
+import play, { downloadPretrained, humanMove } from './pit';
 
 interface AppState {
   enabledAI: boolean;

@@ -1,8 +1,8 @@
-import NeuralNet from '../../NeuralNet';
 import * as tf from '@tensorflow/tfjs';
+import NeuralNet from '../../NeuralNet';
 
+import { Game, NNetArgs, TrainExample } from '../../types/interfaces';
 import TicTacToeNNet from './TicTacToeNNet';
-import { Game, TrainExample, NNetArgs } from '../../types/interfaces';
 
 // Define type for tf.LayersModel 
 type LayersModel = any;
@@ -31,7 +31,7 @@ export class NNetWrapper extends NeuralNet {
     this.board_y = b;
     this.action_size = game.getActionSize();
 
-    console.log('NNetWrapper constructer');
+    console.log('NNetWrapper constructor');
   }
 
   async train(examples: TrainExample[]): Promise<void> {
