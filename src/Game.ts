@@ -3,4 +3,3 @@ export class Game {
     console.log('Game constructer');
   }
 }
-

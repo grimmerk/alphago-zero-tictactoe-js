@@ -1,40 +1,41 @@
 /**
- * [argmax description]
- * @param  {[type]} list [description]
- * @return {[type]}      [description]
+ * Returns the index of the maximum value in the list
+ * @param  {number[]} list - Array of numbers
+ * @return {number} Index of the maximum value
  */
-function argmax(list) {
-  // const list = mcts1.getActionProb(x, 0);
-  //
-
+function argmax(list: number[]): number {
   const len = list.length;
   let maxIndex = -1;
-  let maxValue = null;
+  let maxValue: number | null = null;
+  
   for (let i = 0; i < len; i++) {
     const value = list[i];
     if (i === 0) {
       maxIndex = 0;
       maxValue = value;
-    } else if (value > maxValue) {
+    } else if (value > maxValue!) {
       maxValue = value;
       maxIndex = i;
     }
   }
+  
   if (maxIndex === -1) {
-    throw 'bad prop-list to search max';
+    throw new Error('bad prop-list to search max');
   }
+  
   return maxIndex;
 }
 
-// from https://stackoverflow.com/a/28933315
-/** @description numpy.random.choice fork
- * @param {number} p The probability vector
- * @param {number} values (optional) value array
+/**
+ * Implementation similar to numpy.random.choice
+ * @param {number[]} p - The probability vector
+ * @param {number[] | null} values - (optional) value array
  * @return {number} Chosen value
  */
-function randomChoice(p, values = null) {
+function randomChoice(p: number[], values: number[] | null = null): number {
   const a = p.length;
-  let results = null;
+  let results: number[];
+  
   if (!values || values.length !== p.length) {
     results = [];
     for (let i = 0; i < a; i++) {
@@ -62,4 +63,5 @@ const Utils = {
   argmax,
   randomChoice,
 };
+
 export default Utils;

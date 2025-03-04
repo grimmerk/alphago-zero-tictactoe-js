@@ -1,10 +1,17 @@
+interface Game {
+  getActionSize(): number;
+  getValidMoves(board: any, player: number): any;
+}
+
 export class RandomPlayer {
-  constructor(game) {
+  game: Game;
+  
+  constructor(game: Game) {
     console.log('RandomPlayer constructer');
     this.game = game;
   }
 
-  play = (board) => {
+  play = (board: any): number => {
     // Python:
     // a = np.random.randint(self.game.getActionSize()) [0, low)
     let a = Math.floor(Math.random() * this.game.getActionSize());
@@ -19,9 +26,20 @@ export class RandomPlayer {
 }
 
 export class HumanTicTacToePlayer {
-  constructor(game) {
+  game: Game;
+  isHuman: boolean;
+  
+  constructor(game: Game) {
     console.log('HumanTicTacToePlayer constructer');
     this.game = game;
     this.isHuman = true;
   }
+  
+  /** TODO: confirm it if we really need this */
+  // Adding empty play method to satisfy the interface
+  // play = (board: any): number => {
+  //   // This should never be called for a human player
+  //   console.warn("HumanTicTacToePlayer's play method was called, but this should never happen");
+  //   return -1;
+  // }
 }

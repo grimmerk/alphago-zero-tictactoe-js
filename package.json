@@ -17,15 +17,22 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "typecheck": "tsc --noEmit",
+    "ts:watch": "tsc --noEmit --watch",
+    "ts:build": "tsc"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
     "babel-eslint": "^8.2.3",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.7.0",
-    "gh-pages": "^1.1.0"
+    "gh-pages": "^1.1.0",
+    "typescript": "^5.8.2"
   }
 }

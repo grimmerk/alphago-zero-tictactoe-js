@@ -3,4 +3,3 @@ export class NeuralNet {
     console.log('NeuralNet constructer');
   }
 }
-

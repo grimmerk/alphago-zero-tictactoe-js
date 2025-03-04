@@ -2,39 +2,59 @@ import { Game } from '../Game';
 import Board from './TicTacToeLogic';
 import nj from '@d4c/numjs';
 
+// Define interfaces for return types
+interface BoardSize {
+  a: number;
+  b: number;
+}
+
+interface NextState {
+  boardNdArray: any; // numjs array
+  curPlayer: number;
+}
+
+interface SymmetryElement {
+  b: any; // numjs array
+  p: number[];
+}
+
 // Grimmer: This class needs a lot of numpy operations
 export class TicTacToeGame extends Game {
-  constructor(n = 3) {
+  n: number;
+
+  constructor(n: number = 3) {
     super();
     console.log('TicTacToeGame constructer');
     // board size, 3x3 for TicTacToeGame
     this.n = n;
   }
 
-  getInitBoardNdArray() {
+  getInitBoardNdArray(): any {
     const b = new Board(this.n);
     // return np.array(b.pieces), Python
     return nj.array(b.pieces);
   }
 
   // used by *NNet classes
-  getBoardSize() {
+  getBoardSize(): BoardSize {
     return { a: this.n, b: this.n };
   }
 
   // return number of actions
   // grimmer's QUESTION: why +1, ? neural network's bias?
-  getActionSize() {
+  getActionSize(): number {
     return (this.n * this.n) + 1;
   }
 
-  getNextState(boardNdArray, player, action) {
+  getNextState(boardNdArray: any, player: number, action: number): NextState {
     // # if player takes action on board, return next (board,player)
     // # action must be a valid move
     if (action === this.n * this.n) {
       // return (board, -player)
       console.log('invalid action');
       return { boardNdArray, player: -player };
+      /** TODO: apply this fix */
+      // return { boardNdArray, curPlayer: -player };
     }
 
     const b = new Board(this.n);
@@ -46,8 +66,8 @@ export class TicTacToeGame extends Game {
     return { boardNdArray: nj.array(b.pieces), curPlayer: -player };
   }
 
-  // return a list, 會受getCanonicalForm影響嗎? 不會.
-  getValidMoves(boardNdArray, player) {
+  // return a list, will it be affected by getCanonicalForm? No, it won’t.
+  getValidMoves(boardNdArray: any, player: number): any {
     // Python:
     // # return a fixed size binary vector
     // valids = [0]*this.getActionSize()
@@ -71,7 +91,7 @@ export class TicTacToeGame extends Game {
     return nj.array(valids);
   }
 
-  getGameEnded(boardNdArray, player) {
+  getGameEnded(boardNdArray: any, player: number): number {
     // Python:
     // # return 0 if not ended, 1 if player 1 won, -1 if player 1 lost
     // # player = 1
@@ -92,7 +112,7 @@ export class TicTacToeGame extends Game {
   }
 
   // grimmer's QUESTION: at least not useful for playing. Useful for training (executeEpisode)?
-  getCanonicalForm(boardNdArray, player) {
+  getCanonicalForm(boardNdArray: any, player: number): any {
     // Python:
     // # return state if player==1, else return -state if player==-1
     // return player*board
@@ -101,16 +121,16 @@ export class TicTacToeGame extends Game {
 
   // boardNdArray: 3x3 ndarray
   // e.g. pi:[0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1]
-  getSymmetries(boardNdArray, pi) {
+  getSymmetries(boardNdArray: any, pi: number[]): SymmetryElement[] {
     if (pi.length !== this.n ** 2 + 1) {
-      throw 'not valid pi for Symmetries';
+      throw new Error('not valid pi for Symmetries');
     }
 
     // Python: pi[:-1]. Remove the last one
-    const pi_copy = pi.slice();
+    const pi_copy = [...pi];
     pi_copy.pop();
     const pi_board = nj.reshape(pi_copy, [this.n, this.n]);
-    const l = [];
+    const l: SymmetryElement[] = [];
 
     for (let i = 1; i < 5; i++) {
       for (const j of [true, false]) {
@@ -142,19 +162,17 @@ export class TicTacToeGame extends Game {
     }
 
     return l;
-
-    // np.reshape(pi[:-1], (self.n, self.n))
   }
 
   // used by MCTS
-  stringRepresentation(boardNdArray) {
+  stringRepresentation(boardNdArray: any): string {
     // # 3x3 numpy array (canonical board)
     return JSON.stringify(boardNdArray);
   }
 }
 
 let log = '';
-function print(newLog, end) {
+function print(newLog: string, end?: string): void {
   log += newLog;
   if (typeof end !== 'undefined' && end !== null) {
     log += end;
@@ -162,16 +180,17 @@ function print(newLog, end) {
     log += '\n';
   }
 }
-function flush() {
+
+function flush(): void {
   console.log(log);
 }
 
-export function display(boardNdArray) {
+export function display(boardNdArray: any): void {
   log = '';
   const n = boardNdArray.shape[0];
   const list = boardNdArray.tolist();
   print('  ', '');
-  // Pyton:
+  // Python:
   // for y in range(n):
   //     print (y,"", end="")
   for (let y = 0; y < n; y++) {

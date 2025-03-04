@@ -2,7 +2,22 @@ import Coach from './Coach';
 import { TicTacToeGame } from './tictactoe/TicTacToeGame';
 import { NNetWrapper as NNet } from './tictactoe/tensorflow/NNet';
 
-const args = {
+interface Args {
+  numIters: number;
+  numEps: number;
+  tempThreshold: number;
+  updateThreshold: number;
+  maxlenOfQueue: number;
+  numMCTSSims: number;
+  arenaCompare: number;
+  cpuct: number;
+  checkpoint: string;
+  load_model: boolean;
+  load_folder_file: { folder: string, fileName: string };
+  numItersForTrainExamplesHistory: number;
+}
+
+const args: Args = {
   numIters: 3,
   numEps: 15, // 25,
   tempThreshold: 15,
@@ -11,21 +26,19 @@ const args = {
   numMCTSSims: 25,
   arenaCompare: 100, // 40,
   cpuct: 1,
-
   checkpoint: './temp/',
   load_model: false,
   load_folder_file: { folder: '/dev/models/8x100x50', fileName: 'best.pth.tar' },
   numItersForTrainExamplesHistory: 20,
-
 };
 
-let trainedNN = null;
+let trainedNN: NNet | null = null;
 
-export function getTrainedNN() {
+export function getTrainedNN(): NNet | null {
   return trainedNN;
 }
 
-export default async function train() {
+export default async function train(): Promise<void> {
   const g = new TicTacToeGame();
   const nnet = new NNet(g);
 
