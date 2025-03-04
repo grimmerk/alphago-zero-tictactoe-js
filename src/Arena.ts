@@ -64,7 +64,7 @@ export default class Arena {
       return aiAction;
     }
 
-    // 上一個ai造成的ended?
+    // Was the previous AI caused ended?
     if (this.game.getGameEnded(this.boardNdArray, this.curPlayer) !== 0) {
       // game is ended
       console.log('should not happen, game is ended already');
@@ -74,7 +74,7 @@ export default class Arena {
     this.display(this.boardNdArray);
     // }
 
-    // 就算最後一子還是要call吧.state要變化好
+    // Even if it’s the last move, it still needs to be called. The state needs to change properly.
 
     // 1. human's step.
     this.gameMoveByAction(action);
