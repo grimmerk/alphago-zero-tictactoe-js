@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -12,8 +13,19 @@
   <link rel="shortcut icon" href="/favicon.ico">
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css">
 
+  <script>
+    async function loadNumjs() {
+      // or const url = 'https://esm.sh/@d4c/numjs'
+      const url = 'https://cdn.jsdelivr.net/npm/@d4c/numjs/build/module/numjs.min.js'
+      const module = await import(url);
+      window.nj = module.default || module;
+      console.log('numjs loaded successfully:', window.nj);
+    }
+    loadNumjs();
+  </script>
+
   <title>React TicTacToe AlphaGo App</title>
-  <script type="module" crossorigin src="/assets/index-CrgIQ_TI.js"></script>
+  <script type="module" crossorigin src="/assets/index-CMClDgEB.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/index-CTLgnBap.css">
 </head>
 
@@ -23,22 +35,22 @@
   </noscript>
   <div id="root"></div>
   <script>
-    window.addEventListener('mousedown', function(e) {
+    window.addEventListener('mousedown', function (e) {
       document.body.classList.add('mouse-navigation');
       document.body.classList.remove('kbd-navigation');
     });
-    window.addEventListener('keydown', function(e) {
+    window.addEventListener('keydown', function (e) {
       if (e.keyCode === 9) {
         document.body.classList.add('kbd-navigation');
         document.body.classList.remove('mouse-navigation');
       }
     });
-    window.addEventListener('click', function(e) {
+    window.addEventListener('click', function (e) {
       if (e.target.tagName === 'A' && e.target.getAttribute('href') === '#') {
         e.preventDefault();
       }
     });
-    console.error = (function(old) {
+    console.error = (function (old) {
       return function error() {
         var errors = document.getElementById('errors') || document.createElement('div');
         errors.id = 'errors';
@@ -49,4 +61,5 @@
     })(console.error);
   </script>
 </body>
+
 </html>
