@@ -5,6 +5,8 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // Base path for GitHub Pages deployment
+  base: '/alphago-zero-tictactoe-js/',
   plugins: [
     react(),
     nodePolyfills({

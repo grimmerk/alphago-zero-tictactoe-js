@@ -2,7 +2,7 @@
   "name": "alphago-zero-tictactoe-js",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://github.com/grimmerk/alphago-zero-tictactoe-js",
+  "homepage": "https://grimmerk.github.io/alphago-zero-tictactoe-js/",
   "dependencies": {
     "@tensorflow/tfjs": "^0.10.3",
     "@typescript-eslint/eslint-plugin": "^8.26.0",
