@@ -154,7 +154,7 @@ export class TicTacToeGame extends Game {
         // [3, 2, 1, 6, 5, 4, 9, 8, 7] !!. list type
         // + [pi[-1] (e.g. [33])
         // [3, 2, 1, 6, 5, 4, 9, 8, 7, 33]
-        const p = nj.flatten(newPi).tolist();
+        const p = nj.flatten(newPi).tolist() as number[];
         p.push(pi[pi.length - 1]);
         const element = { b: newB, p };
         // l += [(newB, )], Python
