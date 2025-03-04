@@ -142,7 +142,7 @@ export class NNetWrapper extends NeuralNet {
     } catch (err) {
       console.log('prediction error:', err);
       // return { Ps: [], v: 0 }; // Default return in case of error
-      /** TODO: re-throw this error */
+      throw err;
     }
   }
 
