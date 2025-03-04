@@ -12,12 +12,12 @@ export default class Board {
     this.n = n;
 
     // Create the empty board array
-    this.pieces = Array(this.n).fill(Array(this.n).fill(0));
-    /** TODO: the above seemed to create an 2d array with same 1d array reference, 
+    // this.pieces = Array(this.n).fill(Array(this.n).fill(0));
+    /** the above would create an 2d array with same 1d array reference, 
      * e.g. arr1[0][0] = 1 would result in [1][0], [2][0] = 1.
      * apply this fix later */
     // Note: Need to create a new array for each row to avoid reference issues
-    // this.pieces = Array(this.n).fill(0).map(() => Array(this.n).fill(0));
+    this.pieces = Array(this.n).fill(0).map(() => Array(this.n).fill(0));
   }
 
   get_legal_moves(player?: number): Move[] {
