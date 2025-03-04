@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import { defineConfig } from 'vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 // https://vitejs.dev/config/
@@ -34,7 +34,7 @@ export default defineConfig({
     port: 3000,
   },
   build: {
-    outDir: 'build',
+    outDir: 'dist',
     rollupOptions: {
       // Externalize dependencies that can't be bundled correctly
       external: [],
