@@ -17,14 +17,12 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "test": "react-scripts test --env=jsdom",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "typecheck": "tsc --noEmit",
     "ts:watch": "tsc --noEmit --watch"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.14",
     "@types/node": "^22.13.9",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
