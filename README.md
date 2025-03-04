@@ -20,14 +20,17 @@ npm start // build and launch its live dev web server.
 
 After `npm start`, you can also use `VS Code` with `Debugger for Chrome` extension to debug.
 
-### TypeScript Support
+### TypeScript Support and Vite
 
-This project has been migrated to TypeScript! You can:
+This project has been migrated to TypeScript and now uses Vite! You can:
 
 ```
-npm run typecheck    # Run TypeScript check without emitting files
-npm run ts:watch     # Watch for TypeScript errors in real-time
-npm run ts:build     # Build TypeScript to JavaScript
+npm run dev         # Start Vite development server
+npm run start       # Alias for npm run dev
+npm run build       # Build production bundle
+npm run preview     # Preview production build
+npm run typecheck   # Run TypeScript check without emitting files
+npm run ts:watch    # Watch for TypeScript errors in real-time
 ```
 
 See [TYPESCRIPT.md](TYPESCRIPT.md) for more details on the TypeScript conversion.

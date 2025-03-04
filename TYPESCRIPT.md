@@ -1,12 +1,17 @@
-# TypeScript Migration
+# TypeScript Migration & Vite Setup
 
-This project has been migrated from JavaScript to TypeScript to provide better type safety and developer experience.
+This project has been migrated from JavaScript to TypeScript to provide better type safety and developer experience. Additionally, it has been updated to use Vite as the build tool and development server.
 
 ## What was done
 
 1. Added TypeScript and related dependencies:
    ```
    npm install --save-dev typescript @types/react @types/react-dom @types/jest
+   ```
+
+2. Migrated from React Scripts to Vite:
+   ```
+   npm install --save-dev vite @vitejs/plugin-react
    ```
 
 2. Created `tsconfig.json` to configure TypeScript:
@@ -76,6 +81,26 @@ The core interfaces for the project have been defined in `src/types/interfaces.t
 - `CoachArgs`: Arguments for the Coach class
 - `TrainExample`: Interface for training examples
 - `GameResult`: Interface for game results
+
+## Running the Project
+
+You can use Vite's development server:
+
+```bash
+npm run dev  # or npm start
+```
+
+Build for production:
+
+```bash
+npm run build
+```
+
+Preview the production build:
+
+```bash
+npm run preview
+```
 
 ## Running Type Checking
 

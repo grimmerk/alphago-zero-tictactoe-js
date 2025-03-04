@@ -6,26 +6,29 @@
   "dependencies": {
     "@d4c/numjs": "^0.17.2",
     "@tensorflow/tfjs": "^0.10.3",
-    "react": "^16.3.2",
-    "react-dom": "^16.3.2",
+    "buffer": "^6.0.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "react-scripts": "1.1.4",
     "semantic-ui-react": "^0.79.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "vite",
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "typecheck": "tsc --noEmit",
-    "ts:watch": "tsc --noEmit --watch",
-    "ts:build": "tsc"
+    "ts:watch": "tsc --noEmit --watch"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
+    "@types/node": "^22.13.9",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
     "babel-eslint": "^8.2.3",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
@@ -33,6 +36,8 @@
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.7.0",
     "gh-pages": "^1.1.0",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "vite": "^6.2.0",
+    "vite-plugin-node-polyfills": "^0.23.0"
   }
 }
