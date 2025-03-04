@@ -29,6 +29,7 @@
     "tsc": "tsc"
   },
   "devDependencies": {
+    "@d4c/numjs": "^0.17.34",
     "@types/node": "^22.13.9",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
