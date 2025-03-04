@@ -17,7 +17,7 @@ export default defineConfig({
         global: true,
         process: true
       }
-    })
+    }),    
   ],
   resolve: {
     alias: {
@@ -39,7 +39,15 @@ export default defineConfig({
     outDir: 'dist',
     rollupOptions: {
       // Externalize dependencies that can't be bundled correctly
-      external: [],
+      external: ['@d4c/numjs'],
+      output: {
+        globals: {
+          '@d4c/numjs': 'numjs',
+        },
+        paths: {
+          '@d4c/numjs': 'https://cdn.jsdelivr.net/npm/@d4c/numjs/build/module/numjs.min.js',
+        },
+      },
     },
   },
   optimizeDeps: {

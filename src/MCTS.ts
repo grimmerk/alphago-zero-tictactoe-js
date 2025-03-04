@@ -1,4 +1,4 @@
-// import nj from '@d4c/numjs';
+import nj from '@d4c/numjs';
 import { Game, MCTSArgs, NeuralNetType } from './types/interfaces';
 import Utils from './Utils';
 

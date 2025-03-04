@@ -1,4 +1,4 @@
-// import nj from '@d4c/numjs';
+import nj from '@d4c/numjs';
 import Game from '../Game';
 import Board from './TicTacToeLogic';
 
