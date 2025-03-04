@@ -2,7 +2,8 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ master ]
+    # FIXME: "homepage": "https://grimmerk.github.io/alphago-zero-tictactoe-js",
+    # branches: [ master ]
   workflow_dispatch:
 
 permissions:

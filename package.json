@@ -2,7 +2,7 @@
   "name": "alphago-zero-tictactoe-js",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://grimmerk.github.io/alphago-zero-tictactoe-js",
+  "homepage": "https://github.com/grimmerk/alphago-zero-tictactoe-js",
   "dependencies": {
     "@d4c/numjs": "^0.17.2",
     "@tensorflow/tfjs": "^0.10.3",
