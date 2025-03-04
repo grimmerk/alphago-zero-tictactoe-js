@@ -1,4 +1,4 @@
-import { NeuralNet } from '../../NeuralNet';
+import NeuralNet from '../../NeuralNet';
 import * as tf from '@tensorflow/tfjs';
 
 import TicTacToeNNet from './TicTacToeNNet';

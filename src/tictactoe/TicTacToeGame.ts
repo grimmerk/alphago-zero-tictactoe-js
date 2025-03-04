@@ -1,4 +1,4 @@
-import { Game } from '../Game';
+import Game from '../Game';
 import Board from './TicTacToeLogic';
 import nj from '@d4c/numjs';
 

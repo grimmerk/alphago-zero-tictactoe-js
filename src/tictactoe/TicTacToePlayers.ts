@@ -35,7 +35,6 @@ export class HumanTicTacToePlayer {
     this.isHuman = true;
   }
   
-  /** TODO: confirm it if we really need this */
   // Adding empty play method to satisfy the interface
   play = (board: any): number => {
     // This should never be called for a human player

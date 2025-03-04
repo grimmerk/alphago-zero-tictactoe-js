@@ -2,18 +2,18 @@ import MCTS from './MCTS';
 import Utils from './Utils';
 import Arena from './Arena';
 import * as players from './tictactoe/TicTacToePlayers';
-import { Game, NeuralNet, CoachArgs } from './types/interfaces';
+import { Game, NeuralNetType, CoachArgs } from './types/interfaces';
 
 export default class Coach {
   game: Game;
-  nnet: NeuralNet;
+  nnet: NeuralNetType;
   args: CoachArgs;
   mcts: MCTS;
   trainExamplesHistory: any[][];
   skipFirstSelfPlay: boolean;
   curPlayer: number = 1;
 
-  constructor(game: Game, nnet: NeuralNet, args: CoachArgs) {
+  constructor(game: Game, nnet: NeuralNetType, args: CoachArgs) {
     console.log('Coach constructer');
     this.game = game;
     this.nnet = nnet;

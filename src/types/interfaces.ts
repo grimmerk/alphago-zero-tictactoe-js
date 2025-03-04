@@ -12,7 +12,7 @@ export interface Game {
 }
 
 // Neural Network Interface
-export interface NeuralNet {
+export interface NeuralNetType {
   train: (examples: any[]) => Promise<void>;
   predict: (board: any) => { Ps: number[], v: number };
 }

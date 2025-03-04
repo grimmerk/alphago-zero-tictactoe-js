@@ -1,12 +1,12 @@
 import Utils from './Utils';
 import nj from '@d4c/numjs';
-import { Game, NeuralNet, MCTSArgs } from './types/interfaces';
+import { Game, NeuralNetType, MCTSArgs } from './types/interfaces';
 
 const EPS = 1e-8;
 
 export default class MCTS {
   game: Game;
-  nnet: NeuralNet;
+  nnet: NeuralNetType;
   args: MCTSArgs;
   Qsa: Record<string, number>; // stores Q values for s,a (as defined in the paper)
   Nsa: Record<string, number>; // stores #times edge s,a was visited
@@ -15,7 +15,7 @@ export default class MCTS {
   Es: Record<string, number>; // stores game.getGameEnded ended for board s
   Vs: Record<string, any>; // stores game.getValidMoves for board s
 
-  constructor(game: Game, nnet: NeuralNet, args: MCTSArgs) {
+  constructor(game: Game, nnet: NeuralNetType, args: MCTSArgs) {
     console.log('MCTS constructer');
     this.game = game;
     this.nnet = nnet;
