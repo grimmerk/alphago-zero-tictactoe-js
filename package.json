@@ -4,7 +4,6 @@
   "private": true,
   "homepage": "https://github.com/grimmerk/alphago-zero-tictactoe-js",
   "dependencies": {
-    "@d4c/numjs": "^0.17.2",
     "@tensorflow/tfjs": "^0.10.3",
     "@typescript-eslint/eslint-plugin": "^8.26.0",
     "@typescript-eslint/parser": "^8.26.0",
@@ -26,7 +25,8 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "typecheck": "tsc --noEmit",
-    "ts:watch": "tsc --noEmit --watch"
+    "ts:watch": "tsc --noEmit --watch",
+    "tsc": "tsc"
   },
   "devDependencies": {
     "@types/node": "^22.13.9",

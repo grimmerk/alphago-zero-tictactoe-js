@@ -1,6 +1,9 @@
-import nj from '@d4c/numjs';
+// import nj from '@d4c/numjs';
 import Game from '../Game';
 import Board from './TicTacToeLogic';
+
+// Declare nj globally to fix TypeScript compilation issues
+
 
 // Define interfaces for return types
 interface BoardSize {
