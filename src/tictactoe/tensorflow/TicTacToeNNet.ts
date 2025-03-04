@@ -3,7 +3,6 @@ import { Game, NNetArgs } from '../../types/interfaces';
 
 // Define type for tf.LayersModel 
 type LayersModel = any;
-type SymbolicTensor = any;
 
 export default class TicTacToeNNet {
   board_x: number;
