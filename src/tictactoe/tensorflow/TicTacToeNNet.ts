@@ -23,8 +23,7 @@ export default class TicTacToeNNet {
     this.board_y = b;
     this.args = args;
     this.action_size = game.getActionSize();
-    /** TODO: found seemed bug, and will add it back to fix this after confirming */
-    // this.dropout = args.dropout;
+    this.dropout = args.dropout;
 
     // BatchNormalization:
     // keras: https://keras-cn.readthedocs.io/en/latest/layers/normalization_layer/
