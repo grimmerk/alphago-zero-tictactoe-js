@@ -30,7 +30,8 @@ export async function downloadPretrained(): Promise<void> {
     // }
     preTrainedModel = new NNet(humanGame);
     // firstPlayr = new players.RandomPlayer(g);
-    await preTrainedModel.loadPretrained('https://grimmer.io/alphago-tictactoe-keras-trained/model.json');
+    const url = 'https://raw.githubusercontent.com/grimmerk/grimmerk.github.io/refs/heads/master/alphago-tictactoe-keras-trained/model.json'
+    await preTrainedModel.loadPretrained(url);
   }
 }
 
