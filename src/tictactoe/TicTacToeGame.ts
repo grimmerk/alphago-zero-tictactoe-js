@@ -52,9 +52,7 @@ export class TicTacToeGame extends Game {
     if (action === this.n * this.n) {
       // return (board, -player)
       console.log('invalid action');
-      return { boardNdArray, player: -player };
-      /** TODO: apply this fix */
-      // return { boardNdArray, curPlayer: -player };
+      return { boardNdArray, curPlayer: -player };
     }
 
     const b = new Board(this.n);
