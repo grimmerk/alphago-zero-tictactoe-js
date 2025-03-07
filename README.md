@@ -54,7 +54,7 @@ by using Python.
 
 1. ~~Fix bugs to train models by this JavaScript version project. It may be a TensorFlow.js bug. Maybe waitting for native TensorFlow Node.js binding is better than WebGL solution.~~
 2. ~~Add UI.~~
-3. Clean up.
+3. Clean up. (50%)
 4. Use service worker for cpu heavy loading part.
 5. ~~Use TypeScript instead~~ (Done! See [TYPESCRIPT.md](TYPESCRIPT.md))
 

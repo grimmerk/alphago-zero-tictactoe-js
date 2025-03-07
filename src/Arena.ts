@@ -135,8 +135,8 @@ export default class Arena {
   }
 
   // TODO:
-  // 1. [done] let ui responsbile for the logic about restarts a game
-  // 2. [done] let ui responsbile for calling swap function
+  // 1. [done] let ui responsible for the logic about restarts a game
+  // 2. [done] let ui responsible for calling swap function
   // 3. handle the case to give up+restart game. this.game needs reset
   playNewGameWithHuman(): number {
     this.players = [this.player2, null, this.player1];

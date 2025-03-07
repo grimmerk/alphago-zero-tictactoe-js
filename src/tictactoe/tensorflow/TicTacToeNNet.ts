@@ -101,6 +101,7 @@ export default class TicTacToeNNet {
     //   throw new Error("Model construction failed at output2");
     // }
 
+    /** TODO: add type, equivalently removing LayersModel */
     // Create the model based on the inputs.
     // @ts-ignore: TensorFlow.js model construction with types that TypeScript can't easily verify
     this.model = tf.model({ inputs: input, outputs: [output1, output2] });

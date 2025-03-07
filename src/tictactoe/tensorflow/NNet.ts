@@ -91,6 +91,7 @@ export class NNetWrapper extends NeuralNet {
   async loadPretrained(url: string): Promise<void> {
     console.log('load model start');
 
+    /** TODO: add type, equivalently removing LayersModel */
     // 'https://foo.bar/tfjs_artifacts/model.json'
     // @ts-ignore: TensorFlow.js API typing issue
     this.preTrainedModel = await tf.loadModel(url);
