@@ -1,8 +1,6 @@
 import * as tf from '@tensorflow/tfjs';
-import { Game, NNetArgs } from '../../types/interfaces';
-
-// Define type for tf.LayersModel 
-type LayersModel = any;
+import { TicTacToeGame } from '../../tictactoe/TicTacToeGame';
+import { LayersModel, NNetArgs } from '../../types/interfaces';
 
 export default class TicTacToeNNet {
   board_x: number;
@@ -14,7 +12,7 @@ export default class TicTacToeNNet {
 
   // tf.setBackend('cpu');
   // console.log('tf.getBackend:', tf.getBackend());
-  constructor(game: Game, args: NNetArgs) {
+  constructor(game: TicTacToeGame, args: NNetArgs) {
     console.log('TicTacToeNNet constructor');
 
     const { a, b } = game.getBoardSize();

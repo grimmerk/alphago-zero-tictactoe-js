@@ -1,19 +1,25 @@
+import { NdArray } from '@d4c/numjs';
 import Arena from './Arena';
 import MCTS from './MCTS';
+import { TicTacToeGame } from './tictactoe/TicTacToeGame';
 import * as players from './tictactoe/TicTacToePlayers';
-import { CoachArgs, Game, NeuralNetType } from './types/interfaces';
+import { CoachArgs, NeuralNetType } from './types/interfaces';
 import Utils from './Utils';
 
 export default class Coach {
-  game: Game;
+  game: TicTacToeGame;
   nnet: NeuralNetType;
   args: CoachArgs;
   mcts: MCTS;
-  trainExamplesHistory: any[][];
+  trainExamplesHistory: Array<Array<{
+    input_boards: NdArray;
+    target_pis: number[];
+    target_vs: number;
+  }>>; //any[][];
   skipFirstSelfPlay: boolean;
   curPlayer: number = 1;
 
-  constructor(game: Game, nnet: NeuralNetType, args: CoachArgs) {
+  constructor(game: TicTacToeGame, nnet: NeuralNetType, args: CoachArgs) {
     console.log('Coach constructor');
     this.game = game;
     this.nnet = nnet;
@@ -24,8 +30,12 @@ export default class Coach {
   }
 
   // used by learn()
-  executeEpisode(): any[] {
-    const trainExamples: any[] = [];
+  executeEpisode(): {
+    input_boards: NdArray;
+    target_pis: number[];
+    target_vs: number;
+  }[] {
+    const trainExamples: Array<[NdArray, number, number[], null]> = [];
     let boardNdArray = this.game.getInitBoardNdArray();
     this.curPlayer = 1;
     let episodeStep = 0;
@@ -80,7 +90,11 @@ export default class Coach {
 
       if (!this.skipFirstSelfPlay || i > 1) {
         // Python version uses deque
-        let iterationTrainExamples: any[] = [];
+        let iterationTrainExamples: Array<{
+          input_boards: NdArray;
+          target_pis: number[];
+          target_vs: number;
+        }> = [];
 
         console.log('start %d eposides', this.args.numEps);
         for (let j = 0; j < this.args.numEps; j++) {
@@ -111,7 +125,7 @@ export default class Coach {
       const firstPlayr = new players.RandomPlayer(this.game);
       const arena = new Arena(
         firstPlayr,
-        { play: (x: any) => Utils.argmax(nmcts.getActionProb(x, 0)) },
+        { play: (x: NdArray) => Utils.argmax(nmcts.getActionProb(x, 0)) },
         this.game,
         () => {} // Dummy display function
       );

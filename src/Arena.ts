@@ -1,21 +1,6 @@
-interface Player {
-  play: (board: any) => number;
-  isHuman?: boolean;
-}
-
-interface Game {
-  getInitBoardNdArray: () => any;
-  getCanonicalForm: (board: any, player: number) => any;
-  getValidMoves: (board: any, player: number) => any;
-  getNextState: (board: any, player: number, action: number) => { boardNdArray: any, curPlayer: number };
-  getGameEnded: (board: any, player: number) => number;
-}
-
-interface GameResult {
-  oneWon: number;
-  twoWon: number;
-  draws: number;
-}
+import { NdArray } from "@d4c/numjs";
+import { TicTacToeGame } from './tictactoe/TicTacToeGame';
+import { GameResult, Player } from "./types/interfaces";
 
 export default class Arena {
   // """
@@ -24,15 +9,15 @@ export default class Arena {
   
   private player1: Player;
   private player2: Player;
-  private game: Game;
-  private display: (board: any) => void;
+  private game: TicTacToeGame;
+  private display: (board: NdArray) => void;
   
   // NOTE: used for pretrained-ai vs human
   private players: (Player | null)[] | null = null;
   private curPlayer: number = 0; // 0:dummy. real values: 1 or -1
-  private boardNdArray: any = null;
+  private boardNdArray: NdArray | null = null;
 
-  constructor(player1: Player, player2: Player, game: Game, display: (board: any) => void) {
+  constructor(player1: Player, player2: Player, game: TicTacToeGame, display: (board: NdArray) => void) {
     console.log('Arena constructor');
     this.player1 = player1;
     this.player2 = player2;
@@ -41,8 +26,12 @@ export default class Arena {
   }
 
   gameMoveByAction(action: number): void {
-    let valids = this.game.getValidMoves(this.game.getCanonicalForm(this.boardNdArray, this.curPlayer), 1);
-    valids = valids.tolist();
+    if(!this.boardNdArray) {
+      throw new Error('boardNdArray is null !');
+    }
+
+    let valids: NdArray | any[]  = this.game.getValidMoves(this.game.getCanonicalForm(this.boardNdArray, this.curPlayer), 1);
+    valids = valids.tolist() as any[];
     if (valids[action] == 0) {
       console.log(action);
       // assert valids[action] >0
@@ -55,6 +44,10 @@ export default class Arena {
 
   // a: board index from 0 to 8
   humanStep(action: number): number {
+    if(!this.boardNdArray) {
+      throw new Error('boardNdArray is null !');
+    }
+
     console.log('humanStep');
     console.log(`current Player: ${this.curPlayer}`);
 
@@ -111,6 +104,11 @@ export default class Arena {
     let action = -1;
     console.log('tryToPlayAIStep');
     if (this.players && !this.players[this.curPlayer + 1]?.isHuman) {
+      if(!this.boardNdArray) {
+        throw new Error('boardNdArray is null !');
+      }
+  
+
       // it is an AI
 
       // let it = 0;
@@ -166,8 +164,8 @@ export default class Arena {
       if (!player) continue;
       
       const action = player.play(this.game.getCanonicalForm(boardNdArray, curPlayer));
-      let valids = this.game.getValidMoves(this.game.getCanonicalForm(boardNdArray, curPlayer), 1);
-      valids = valids.tolist();
+      let valids: NdArray | any[] = this.game.getValidMoves(this.game.getCanonicalForm(boardNdArray, curPlayer), 1);
+      valids = valids.tolist() as any[];
 
       if (valids[action] == 0) {
         console.log(action);

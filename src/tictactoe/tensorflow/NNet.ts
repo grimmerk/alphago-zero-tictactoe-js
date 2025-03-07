@@ -1,11 +1,12 @@
 import * as tf from '@tensorflow/tfjs';
 import NeuralNet from '../../NeuralNet';
 
-import { Game, NNetArgs, TrainExample } from '../../types/interfaces';
+import { NdArray } from '@d4c/numjs';
+import { Tensor } from '@tensorflow/tfjs';
+import { TicTacToeGame } from '../../tictactoe/TicTacToeGame';
+import { LayersModel, NNetArgs, TrainExample } from '../../types/interfaces';
 import TicTacToeNNet from './TicTacToeNNet';
 
-// Define type for tf.LayersModel 
-type LayersModel = any;
 
 const args: NNetArgs = {
   lr: 0.001,
@@ -23,7 +24,7 @@ export class NNetWrapper extends NeuralNet {
   action_size: number;
   preTrainedModel: LayersModel | null = null;
 
-  constructor(game: Game) {
+  constructor(game: TicTacToeGame) {
     super();
     this.nnet = new TicTacToeNNet(game, args);
     const { a, b } = game.getBoardSize();
@@ -46,7 +47,7 @@ export class NNetWrapper extends NeuralNet {
     for (let i = 0; i < total; i++) {
       const example = examples[i];
       const { input_boards, target_pis, target_vs } = example;
-      const input_boards2 = input_boards.tolist(); // 3x3 numjs(numpy ndarray like)
+      const input_boards2 = input_boards.tolist() as number[][]; // 3x3 numjs(numpy ndarray like)
       inputData.push(input_boards2);
       pisData.push(target_pis);
       vsData.push([target_vs]);
@@ -78,7 +79,7 @@ export class NNetWrapper extends NeuralNet {
       batchSize: args.batch_size,
       epochs: args.epochs, // params.epochs, //iris, default 40, use epoch as batch
       callbacks: {
-        onEpochEnd: (epoch: number, logs: any) => {
+        onEpochEnd: (epoch: number, logs?: { dense_Dense3_loss ?: number, dense_Dense4_loss ?: number, loss ?: number}) => {
           console.log('onEpochEnd');
         },
       },
@@ -96,16 +97,16 @@ export class NNetWrapper extends NeuralNet {
     console.log('load model ok');
   }
 
-  predict(boardNdArray: any): { Ps: number[], v: number } {
+  predict(boardNdArray: NdArray): { Ps: number[], v: number } {
     try {
       // # preparing input
-      let input = boardNdArray.tolist();
+      let input: number[][] | Tensor = boardNdArray.tolist() as number[][];
 
       // TODO remove hard code [1,3,3]
-      input = tf.tensor3d([input], [1, 3, 3]);
+      input = tf.tensor3d([input], [1, 3, 3]) as Tensor;
 
       // # run
-      let prediction;
+      let prediction: tf.Tensor2D[];
       if (this.preTrainedModel) {
         // NOTE: This is to test loading Python Keras preTrainedModel which uses
         // [1,3,3]->input->reshape->cnn
@@ -125,7 +126,7 @@ export class NNetWrapper extends NeuralNet {
         throw new Error("Prediction should be an array");
       }
 
-      const data1 = prediction[0].dataSync();
+      const data1 = prediction[0].dataSync(); // Float32Array
       // @ts-ignore: dataSync returns a TypedArray that we convert to standard array
       const data12: number[] = Array.from(data1);
       // @ts-ignore: dataSync returns a TypedArray that we convert to standard array
