@@ -8,13 +8,13 @@ import { TicTacToeGame, display } from './tictactoe/TicTacToeGame';
 import { NNetWrapper as NNet } from './tictactoe/tensorflow/NNet';
 // from tictactoe.keras.NNet import NNetWrapper
 
+import { NdArray } from '@d4c/numjs';
 import * as players from './tictactoe/TicTacToePlayers';
 // from tictactoe.TicTacToePlayers import *
 
-// Player interface
-interface Player {
-  play: (board: any) => number;
-}
+import { Player } from './types/interfaces';
+
+
 
 // TicTacToeGame reference
 // seems that it does not need to be reused
@@ -80,7 +80,7 @@ export default function play(mode?: number, aiFirst?: boolean): number | undefin
   if (mode) {
     mcts1 = new MCTS(g, n1!, args1);
 
-    const n1p = (x: any) => {
+    const n1p = (x: NdArray) => {
       const list = mcts1!.getActionProb(x, 0);
       return Utils.argmax(list);
     };

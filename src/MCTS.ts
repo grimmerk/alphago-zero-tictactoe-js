@@ -1,5 +1,6 @@
-import nj from '@d4c/numjs';
-import { Game, MCTSArgs, NeuralNetType } from './types/interfaces';
+import nj, { NdArray } from '@d4c/numjs';
+import { TicTacToeGame } from './tictactoe/TicTacToeGame';
+import { MCTSArgs, NeuralNetType } from './types/interfaces';
 import Utils from './Utils';
 
 // Declare nj globally to fix TypeScript compilation issues
@@ -7,7 +8,7 @@ import Utils from './Utils';
 const EPS = 1e-8;
 
 export default class MCTS {
-  game: Game;
+  game: TicTacToeGame;
   nnet: NeuralNetType;
   args: MCTSArgs;
   Qsa: Record<string, number>; // stores Q values for s,a (as defined in the paper)
@@ -17,7 +18,7 @@ export default class MCTS {
   Es: Record<string, number>; // stores game.getGameEnded ended for board s
   Vs: Record<string, any>; // stores game.getValidMoves for board s
 
-  constructor(game: Game, nnet: NeuralNetType, args: MCTSArgs) {
+  constructor(game: TicTacToeGame, nnet: NeuralNetType, args: MCTSArgs) {
     console.log('MCTS constructor');
     this.game = game;
     this.nnet = nnet;
@@ -31,7 +32,7 @@ export default class MCTS {
   }
 
   // return a array object
-  getActionProb(canonicalBoard: any, temp: number = 1): number[] {
+  getActionProb(canonicalBoard: NdArray, temp: number = 1): number[] {
     for (let i = 0; i < this.args.numMCTSSims; i++) {
       // console.log(`MCTS loop:${i}`);
       this.search(canonicalBoard);
@@ -84,7 +85,7 @@ export default class MCTS {
    * Returns:
    *     v: the negative of the value of the current canonicalBoard
    */
-  search(canonicalBoard: any): number {
+  search(canonicalBoard: NdArray): number {
     const s = this.game.stringRepresentation(canonicalBoard);
 
     if (!this.Es.hasOwnProperty(s)) {

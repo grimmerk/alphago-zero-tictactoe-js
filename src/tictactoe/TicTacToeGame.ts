@@ -1,4 +1,4 @@
-import nj from '@d4c/numjs';
+import nj, { NdArray } from '@d4c/numjs';
 import Game from '../Game';
 import Board from './TicTacToeLogic';
 
@@ -12,12 +12,12 @@ interface BoardSize {
 }
 
 interface NextState {
-  boardNdArray: any; // numjs array
+  boardNdArray: NdArray; // numjs array
   curPlayer: number;
 }
 
 interface SymmetryElement {
-  b: any; // numjs array
+  b: NdArray; // numjs array
   p: number[];
 }
 
@@ -32,7 +32,7 @@ export class TicTacToeGame extends Game {
     this.n = n;
   }
 
-  getInitBoardNdArray(): any {
+  getInitBoardNdArray(): NdArray {
     const b = new Board(this.n);
     // return np.array(b.pieces), Python
     return nj.array(b.pieces);
@@ -49,7 +49,7 @@ export class TicTacToeGame extends Game {
     return (this.n * this.n) + 1;
   }
 
-  getNextState(boardNdArray: any, player: number, action: number): NextState {
+  getNextState(boardNdArray: NdArray, player: number, action: number): NextState {
     // # if player takes action on board, return next (board,player)
     // # action must be a valid move
     if (action === this.n * this.n) {
@@ -60,7 +60,7 @@ export class TicTacToeGame extends Game {
 
     const b = new Board(this.n);
     // b.pieces = np.copy(board), Python
-    b.pieces = boardNdArray.tolist();
+    b.pieces = boardNdArray.tolist() as number[][];
 
     const move = { x: Math.floor(action / this.n), y: (action % this.n) };
     b.execute_move(move, player);
@@ -68,14 +68,14 @@ export class TicTacToeGame extends Game {
   }
 
   // return a list, will it be affected by getCanonicalForm? No, it won’t.
-  getValidMoves(boardNdArray: any, player: number): any {
+  getValidMoves(boardNdArray: NdArray, player: number): NdArray {
     // Python:
     // # return a fixed size binary vector
     // valids = [0]*this.getActionSize()
     // b.pieces = np.copy(board)
     const valids = Array(this.getActionSize()).fill(0);
     const b = new Board(this.n);
-    b.pieces = boardNdArray.tolist();
+    b.pieces = boardNdArray.tolist() as number[][];
 
     const legalMoves = b.get_legal_moves(player);
     if (legalMoves.length === 0) {
@@ -92,12 +92,12 @@ export class TicTacToeGame extends Game {
     return nj.array(valids);
   }
 
-  getGameEnded(boardNdArray: any, player: number): number {
+  getGameEnded(boardNdArray: NdArray, player: number): number {
     // Python:
     // # return 0 if not ended, 1 if player 1 won, -1 if player 1 lost
     // # player = 1
     const b = new Board(this.n);
-    b.pieces = boardNdArray.tolist();
+    b.pieces = boardNdArray.tolist() as number[][];
 
     if (b.is_win(player)) {
       return 1;
@@ -113,7 +113,7 @@ export class TicTacToeGame extends Game {
   }
 
   // grimmer's QUESTION: at least not useful for playing. Useful for training (executeEpisode)?
-  getCanonicalForm(boardNdArray: any, player: number): any {
+  getCanonicalForm(boardNdArray: NdArray, player: number): NdArray {
     // Python:
     // # return state if player==1, else return -state if player==-1
     // return player*board
@@ -122,7 +122,7 @@ export class TicTacToeGame extends Game {
 
   // boardNdArray: 3x3 ndarray
   // e.g. pi:[0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1]
-  getSymmetries(boardNdArray: any, pi: number[]): SymmetryElement[] {
+  getSymmetries(boardNdArray: NdArray, pi: number[]): SymmetryElement[] {
     if (pi.length !== this.n ** 2 + 1) {
       throw new Error('not valid pi for Symmetries');
     }
@@ -166,7 +166,7 @@ export class TicTacToeGame extends Game {
   }
 
   // used by MCTS
-  stringRepresentation(boardNdArray: any): string {
+  stringRepresentation(boardNdArray: NdArray): string {
     // # 3x3 numpy array (canonical board)
     return JSON.stringify(boardNdArray);
   }
@@ -186,10 +186,10 @@ function flush(): void {
   console.log(log);
 }
 
-export function display(boardNdArray: any): void {
+export function display(boardNdArray: NdArray): void {
   log = '';
   const n = boardNdArray.shape[0];
-  const list = boardNdArray.tolist();
+  const list = boardNdArray.tolist() as number[][];
   print('  ', '');
   // Python:
   // for y in range(n):

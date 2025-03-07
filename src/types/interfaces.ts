@@ -1,25 +1,30 @@
-// Game Interface
-export interface Game {
-  getInitBoardNdArray: () => any;
-  getCanonicalForm: (board: any, player: number) => any;
-  getNextState: (board: any, player: number, action: number) => { boardNdArray: any, curPlayer: number };
-  getGameEnded: (board: any, player: number) => number;
-  getSymmetries: (board: any, pi: number[]) => Array<{ b: any, p: number[] }>;
-  getBoardSize: () => { a: number, b: number };
-  getActionSize: () => number;
-  getValidMoves: (board: any, player: number) => any;
-  stringRepresentation: (board: any) => string;
-}
+import { NdArray } from "@d4c/numjs";
+
+// Game Interface, implemented by TicTacToeGame
+// TODO: move to class Game and make it abstract?
+// export interface Game {
+//   getInitBoardNdArray: () => NdArray;
+//   getCanonicalForm: (board: NdArray, player: number) => NdArray;
+//   getNextState: (board: NdArray, player: number, action: number) => { boardNdArray: NdArray, curPlayer: number };
+//   getGameEnded: (board: NdArray, player: number) => number;
+//   getSymmetries: (board: NdArray, pi: number[]) => Array<{ b: any, p: number[] }>;
+//   getBoardSize: () => { a: number, b: number };
+//   getActionSize: () => number;
+//   getValidMoves: (board: NdArray, player: number) => NdArray;
+//   stringRepresentation: (board: NdArray) => string;
+// }
+
+export type LayersModel = any;
 
 // Neural Network Interface
 export interface NeuralNetType {
-  train: (examples: any[]) => Promise<void>;
-  predict: (board: any) => { Ps: number[], v: number };
+  train: (examples: Array<{input_boards: NdArray, target_pis: number[], target_vs:number}>) => Promise<void>;
+  predict: (board: NdArray) => { Ps: number[], v: number };
 }
 
 // Player Interface
 export interface Player {
-  play: (board: any) => number;
+  play: (board: NdArray) => number; 
   isHuman?: boolean;
 }
 
@@ -38,7 +43,7 @@ export interface GameResult {
 
 // Training Example Interface
 export interface TrainExample {
-  input_boards: any;
+  input_boards: NdArray;
   target_pis: number[];
   target_vs: number;
 }

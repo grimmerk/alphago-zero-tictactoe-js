@@ -1,23 +1,9 @@
 import Coach from './Coach';
 import { TicTacToeGame } from './tictactoe/TicTacToeGame';
 import { NNetWrapper as NNet } from './tictactoe/tensorflow/NNet';
+import { CoachArgs } from './types/interfaces';
 
-interface Args {
-  numIters: number;
-  numEps: number;
-  tempThreshold: number;
-  updateThreshold: number;
-  maxlenOfQueue: number;
-  numMCTSSims: number;
-  arenaCompare: number;
-  cpuct: number;
-  checkpoint: string;
-  load_model: boolean;
-  load_folder_file: { folder: string, fileName: string };
-  numItersForTrainExamplesHistory: number;
-}
-
-const args: Args = {
+const args: CoachArgs = {
   numIters: 3,
   numEps: 15, // 25,
   tempThreshold: 15,
