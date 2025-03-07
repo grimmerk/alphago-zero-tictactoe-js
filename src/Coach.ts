@@ -3,7 +3,7 @@ import Arena from './Arena';
 import MCTS from './MCTS';
 import { TicTacToeGame } from './tictactoe/TicTacToeGame';
 import * as players from './tictactoe/TicTacToePlayers';
-import { CoachArgs, NeuralNetType } from './types/interfaces';
+import { CoachArgs, NeuralNetType, TrainExample } from './types/interfaces';
 import Utils from './Utils';
 
 export default class Coach {
@@ -11,11 +11,7 @@ export default class Coach {
   nnet: NeuralNetType;
   args: CoachArgs;
   mcts: MCTS;
-  trainExamplesHistory: Array<Array<{
-    input_boards: NdArray;
-    target_pis: number[];
-    target_vs: number;
-  }>>; //any[][];
+  trainExamplesHistory: Array<Array<TrainExample>>;
   skipFirstSelfPlay: boolean;
   curPlayer: number = 1;
 
@@ -30,11 +26,7 @@ export default class Coach {
   }
 
   // used by learn()
-  executeEpisode(): {
-    input_boards: NdArray;
-    target_pis: number[];
-    target_vs: number;
-  }[] {
+  executeEpisode(): TrainExample[] {
     const trainExamples: Array<[NdArray, number, number[], null]> = [];
     let boardNdArray = this.game.getInitBoardNdArray();
     this.curPlayer = 1;
@@ -90,11 +82,7 @@ export default class Coach {
 
       if (!this.skipFirstSelfPlay || i > 1) {
         // Python version uses deque
-        let iterationTrainExamples: Array<{
-          input_boards: NdArray;
-          target_pis: number[];
-          target_vs: number;
-        }> = [];
+        let iterationTrainExamples: Array<TrainExample> = [];
 
         console.log('start %d eposides', this.args.numEps);
         for (let j = 0; j < this.args.numEps; j++) {
